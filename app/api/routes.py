@@ -41,8 +41,8 @@ def recommendations():
         print(error_message)
         return jsonify({"error": "Internal Server Error"}), 500
 
-@api.route('/form', methods=['GET'])
-def form():
+@api.route('/', methods=['GET'])
+def home():
     return render_template('form.html')
 
 

@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Mood</title>
+</head>
 <body>
-
-<h2>Recommendation Form</h2>
-<form action="http://127.0.0.1:5000/api/recommendations" method="post">
-  Mood: <input type="text" name="mood" value="happy">
-  <input type="submit" value="Submit">
-</form>
-
+    <form action="/recommendations" method="post">
+        <label for="mood">Enter your mood:</label>
+        <input type="text" id="mood" name="mood" required>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>

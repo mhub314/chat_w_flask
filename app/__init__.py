@@ -17,12 +17,11 @@ def create_app():
 
     db.init_app(app)
     migrate.init_app(app, db)
-    cors.init_app(app, resources={r"/*": {"origins": "*"}})
+    cors.init_app(app)
     moment.init_app(app)
 
     with app.app_context():
         from . import models
-
         from .api import api as api_blueprint
         app.register_blueprint(api_blueprint)
 
