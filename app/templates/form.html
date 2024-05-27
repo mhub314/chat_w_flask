@@ -3,13 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Mood</title>
+    <title>Get Recommendations</title>
+    <style>
+        .selection-button {
+            margin: 5px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .selected {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <form action="/recommendations" method="post">
-        <label for="mood">Find me something similar to:</label>
-        <input type="text" id="mood" name="mood" required>
+    <form id="recommendationForm" action="/recommendations" method="post">
+        <label for="movie">Find me something similar to:</label>
+        <input type="text" id="movie" name="movie">
+        
+        <label>Genres:</label>
+        <div id="genres">
+            <button type="button" class="selection-button" data-value="action">Action</button>
+            <button type="button" class="selection-button" data-value="adventure">Adventure</button>
+            <button type="button" class="selection-button" data-value="animation">Animation</button>
+            <button type="button" class="selection-button" data-value="comedy">Comedy</button>
+            <button type="button" class="selection-button" data-value="documentary">Documentary</button>
+            <button type="button" class="selection-button" data-value="drama">Drama</button>
+            <button type="button" class="selection-button" data-value="fantasy">Fantasy</button>
+            <button type="button" class="selection-button" data-value="horror">Horror</button>
+            <button type="button" class="selection-button" data-value="musical">Musical</button>
+            <button type="button" class="selection-button" data-value="romantic comedy">Romantic Comedy</button>
+            <button type="button" class="selection-button" data-value="sci-fi">Sci-Fi</button>
+            <button type="button" class="selection-button" data-value="thriller/suspense">Thriller/Suspense</button>
+        </div>
+        
+        <label>Moods:</label>
+        <div id="moods">
+            <button type="button" class="selection-button" data-value="cynical">Cynical</button>
+            <button type="button" class="selection-button" data-value="funny">Funny</button>
+            <button type="button" class="selection-button" data-value="gripping">Gripping</button>
+            <button type="button" class="selection-button" data-value="intense">Intense</button>
+            <button type="button" class="selection-button" data-value="heartwarming">Heartwarming</button>
+            <button type="button" class="selection-button" data-value="lighthearted">Lighthearted</button>
+            <button type="button" class="selection-button" data-value="scary">Scary</button>
+            <button type="button" class="selection-button" data-value="moving">Moving</button>
+            <button type="button" class="selection-button" data-value="tense">Tense</button>
+            <button type="button" class="selection-button" data-value="thought-provoking">Thought-Provoking</button>
+            <button type="button" class="selection-button" data-value="uplifting">Uplifting</button>
+        </div>
+        
+        <label>Streaming Services:</label>
+        <div id="streaming-services">
+            <button type="button" class="selection-button" data-value="amazon prime">Amazon Prime</button>
+            <button type="button" class="selection-button" data-value="hulu">Hulu</button>
+            <button type="button" class="selection-button" data-value="netflix">Netflix</button>
+            <button type="button" class="selection-button" data-value="hbo">HBO</button>
+        </div>
+        
         <button type="submit">Submit</button>
     </form>
+    
+    <script>
+        const maxSelections = 6;
+        let selectedCount = 0;
+
+        document.querySelectorAll('.selection-button').forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.classList.contains('selected')) {
+                    button.classList.remove('selected');
+                    selectedCount--;
+                } else {
+                    if (selectedCount < maxSelections) {
+                        button.classList.add('selected');
+                        selectedCount++;
+                    } else {
+                        alert('You can select up to 6 genres/moods.');
+                    }
+                }
+            });
+        });
+
+        document.getElementById('recommendationForm').addEventListener('submit', function(event) {
+            const selectedGenres = Array.from(document.querySelectorAll('#genres .selected')).map(button => button.getAttribute('data-value'));
+            const selectedMoods = Array.from(document.querySelectorAll('#moods .selected')).map(button => button.getAttribute('data-value'));
+            const selectedStreamingServices = Array.from(document.querySelectorAll('#streaming-services .selected')).map(button => button.getAttribute('data-value'));
+            
+            if (selectedGenres.length + selectedMoods.length > maxSelections) {
+                event.preventDefault();
+                alert('You can select a total of up to 6 genres and moods.');
+                return;
+            }
+
+            const hiddenGenresInput = document.createElement('input');
+            hiddenGenresInput.type = 'hidden';
+            hiddenGenresInput.name = 'genres';
+            hiddenGenresInput.value = selectedGenres.join(',');
+
+            const hiddenMoodsInput = document.createElement('input');
+            hiddenMoodsInput.type = 'hidden';
+            hiddenMoodsInput.name = 'moods';
+            hiddenMoodsInput.value = selectedMoods.join(',');
+
+            const hiddenStreamingServicesInput = document.createElement('input');
+            hiddenStreamingServicesInput.type = 'hidden';
+            hiddenStreamingServicesInput.name = 'streaming_services';
+            hiddenStreamingServicesInput.value = selectedStreamingServices.join(',');
+
+            this.appendChild(hiddenGenresInput);
+            this.appendChild(hiddenMoodsInput);
+            this.appendChild(hiddenStreamingServicesInput);
+        });
+    </script>
 </body>
 </html>
+

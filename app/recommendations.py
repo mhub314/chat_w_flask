@@ -36,8 +36,25 @@ def chat_with_gpt(prompt):
         logging.error(error_message)
         raise
 
-def get_recommendations(mood):
-    prompt = f"Please simply list 3 movies or TV shows for someone who is feeling {mood}."
+# def get_recommendations(mood):
+#     prompt = f"Please simply list 3 movies or TV shows for someone who is feeling {mood}."
+#     logging.debug(f"Generated prompt: {prompt}")
+#     return chat_with_gpt(prompt)
+
+def get_recommendations(movie=None, genres=None, mood=None, streaming_services=None):
+    prompt = "Please recommend 3 movies or tv shows"
+
+    if movie:
+        prompt += f" similar to {movie}."
+    if genres:
+        prompt += f" In the genres: {', '.join(genres)}."
+    if mood:
+        prompt += f" for someone who is feeling {mood}"
+    if streaming_services:
+        prompt += f" currently available on {', '.join(streaming_services)}. Include which streaming service each recommendation is available on."
+
+    prompt += " for each recommendation, please provide the title, a percentage similarity, 1-2 sentences about why they are similar, any well known actors in the recommended film or show, and a short synopsis of the recommended movie or tv show."
+
     logging.debug(f"Generated prompt: {prompt}")
     return chat_with_gpt(prompt)
 
