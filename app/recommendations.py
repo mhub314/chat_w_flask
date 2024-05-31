@@ -44,17 +44,21 @@ def chat_with_gpt(prompt):
 def get_recommendations(movie=None, genres=None, mood=None, streaming_services=None):
     prompt = "Please recommend 3 movies or tv shows"
 
-    if movie:
-        prompt += f" similar to {movie}."
+    # if movie:
+    #     prompt += f" similar to {movie}."
     if genres:
         prompt += f" In the genres: {', '.join(genres)}."
     if mood:
         prompt += f" for someone who is feeling {mood}"
+    if movie:
+        prompt += f" similar to {movie}. Include a percentage similarity and 1-2 sentences about why they are similar."
     if streaming_services:
         prompt += f" currently available on {', '.join(streaming_services)}. Include which streaming service each recommendation is available on."
 
-    prompt += " for each recommendation, please provide the title, a percentage similarity, 1-2 sentences about why they are similar, any well known actors in the recommended film or show, and a short synopsis of the recommended movie or tv show."
+    prompt += " for each recommendation, please provide the title, the runtime, the Rotten Tomatoes score, a 1-2 sentence synopsis with any well-known actors of the recommended movie or tv show, and a link to the IMDB page."
 
     logging.debug(f"Generated prompt: {prompt}")
     return chat_with_gpt(prompt)
 
+# add actors to synopsis, not separated on another line
+# remove similarity percentage when no user input - DONE - ONLY WORKS SOME TIME??

@@ -72,19 +72,25 @@
 
         document.querySelectorAll('.selection-button').forEach(button => {
             button.addEventListener('click', () => {
-                if (button.classList.contains('selected')) {
-                    button.classList.remove('selected');
-                    selectedCount--;
-                } else {
-                    if (selectedCount < maxSelections) {
-                        button.classList.add('selected');
-                        selectedCount++;
+                const isStreamingService = button.closest('#streaming-services')
+
+                if (!isStreamingService) {
+                    if (button.classList.contains('selected')) {
+                        button.classList.remove('selected');
+                        selectedCount--;
                     } else {
-                        alert('You can select up to 6 genres/moods.');
+                        if (selectedCount < maxSelections) {
+                            button.classList.add('selected');
+                            selectedCount++;
+                        } else {
+                            alert('You can select up to 6 genres/moods.');
+                        }
                     }
-                }
-            });
+                } else {
+                    button.classList.toggle('selected');
+            }
         });
+    });
 
         document.getElementById('recommendationForm').addEventListener('submit', function(event) {
             const selectedGenres = Array.from(document.querySelectorAll('#genres .selected')).map(button => button.getAttribute('data-value'));
