@@ -63,6 +63,8 @@
             <button type="button" class="selection-button" data-value="hbo">HBO</button>
         </div>
         
+        <button type="button" id="clearSelections">Clear</button>
+
         <button type="submit">Submit</button>
     </form>
     
@@ -121,6 +123,13 @@
             this.appendChild(hiddenGenresInput);
             this.appendChild(hiddenMoodsInput);
             this.appendChild(hiddenStreamingServicesInput);
+        });
+
+        document.getElementById('clearSelections').addEventListener('click', function() {
+            document.querySelectorAll('.selection-button.selected').forEach(button => {
+                button.classList.remove('selected');
+            });
+            selectedCount = 0;
         });
     </script>
 </body>
