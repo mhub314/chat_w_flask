@@ -8,7 +8,7 @@ def recommendations():
     logging.debug("Accessed /api/recommendations route")
     print("Accessed /api/recommendations route")
     try:
-        data = request.get_json() if request.is_json else request.form.to_dict()
+        data = request.form.to_dict()
         logging.debug(f'Received data: {data}')
         print(f"Received data: {data}")
 
@@ -16,7 +16,7 @@ def recommendations():
             error_message = "No data received"
             logging.error(error_message)
             print(error_message)
-            return jsonify({"error": error_message}), 400
+            return render_template('recommendations.html', error=error_message)
         
         movie = data.get('movie')
         genres = data.get('genres')
@@ -32,23 +32,16 @@ def recommendations():
         if streaming_services:
             streaming_services = [service.strip() for service in streaming_services.split(",")]
 
-        # mood = data.get('mood', '')
-        # if not mood:
-        #     error_message = "Mood is required but not provided"
-        #     logging.error(error_message)
-        #     print(error_message)
-        #     return jsonify({"error": error_message}), 400
-
         recommendations = get_recommendations(movie, genres, moods, streaming_services)
         logging.debug(f"Recommendations: {recommendations}")
         print(f"Recommendations: {recommendations}")
-        return jsonify({"recommendations": recommendations})
+        return render_template('recommendations.html', recommendations=recommendations)
 
     except Exception as e:
         error_message = f"Error: {str(e)}"
         logging.error(error_message)
         print(error_message)
-        return jsonify({"error": "Internal Server Error"}), 500
+        return render_template('recommendations.html', error=error_message)
 
 @api.route('/', methods=['GET'])
 def home():

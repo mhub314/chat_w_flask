@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations</title>
+    <style>
+        .poster {
+            width: 100px;
+            height: auto;
+        }
+        .recommendation {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recommendations</h1>
+    <div id="recommendations">
+        {% if error %}
+            <p>{{ error }}</p>
+        {% else %}
+            {% for rec in recommendations %}
+                <div class="recommendation">
+                    <p><strong>{{ rec.title }} ({{ rec.year }})</strong></p>
+                    <p>Runtime: {{ rec.runtime }} | Streaming on: {{ rec.streaming_service }}</p>
+                    {% if rec.poster_url %}
+                        <img src="{{ rec.poster_url }}" alt="Poster" class="poster">
+                    {% endif %}
+                    <p>Critics Score: {{ rec.rotten_tomatoes_critic_score }} | Audience Score: {{ rec.rotten_tomatoes_audience_score }}</p>
+                    <p>Synopsis: {{ rec.synopsis }}</p>
+                    <p>Reviews: {{ rec.reviews }}</p>
+                    <p><a href="{{ rec.imdb_link }}" target="_blank">IMDB Page</a></p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <a href="/">Back to form</a>
+</body>
+</html>
+
+
+
