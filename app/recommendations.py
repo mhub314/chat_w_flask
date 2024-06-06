@@ -104,15 +104,24 @@ def extract_details(recommendation):
     logging.debug(f"Extracting details from: {lines}")
     
     try:
-        details['title'] = extract_title(lines[0])
-        details['year'] = extract_year(lines[0])
-        details['runtime'] = extract_runtime(lines[1])
-        details['streaming_service'] = extract_streaming_service(lines[2])
-        details['rotten_tomatoes_critic_score'] = extract_critic_score(lines[3])
-        details['rotten_tomatoes_audience_score'] = extract_audience_score(lines[4])
-        details['synopsis'] = extract_synopsis(lines[5])
-        details['reviews'] = extract_reviews(lines[6])
-        details['imdb_link'] = extract_imdb_link(lines[7])
+        if len(lines) > 0:
+            details['title'] = extract_title(lines[0])
+        if len(lines) > 1:
+            details['year'] = extract_year(lines[0])
+        if len(lines) > 2:
+            details['runtime'] = extract_runtime(lines[1])
+        if len(lines) > 3:
+            details['streaming_service'] = extract_streaming_service(lines[2])
+        if len(lines) > 4:
+            details['rotten_tomatoes_critic_score'] = extract_critic_score(lines[3])
+        if len(lines) > 5:
+            details['rotten_tomatoes_audience_score'] = extract_audience_score(lines[4])
+        if len(lines) > 6:
+            details['synopsis'] = extract_synopsis(lines[5])
+        if len(lines) > 7:
+            details['reviews'] = extract_reviews(lines[6])
+        if len(lines) > 8:
+            details['imdb_link'] = extract_imdb_link(lines[7])
     except IndexError as e:
         logging.error(f"IndexError: {e} - Line: {lines}")
         logging.error(f"Details so far: {details}")
@@ -122,28 +131,28 @@ def extract_details(recommendation):
     return details
 
 def extract_title(line):
-    return line.split('"')[1].strip()
+    return line.split('"')[1].strip() if '"' in line else ''
 
 def extract_year(line):
-    return line.split('(')[1].split(')')[0].strip()
+    return line.split('(')[1].split(')')[0].strip() if '(' in line and ')' in line else ''
 
 def extract_runtime(line):
-    return line.split(': ')[1].strip()
+    return line.split(': ')[1].strip() if ': ' in line else ''
 
 def extract_streaming_service(line):
-    return line.split(': ')[1].strip()
+    return line.split(': ')[1].strip() if ': ' in line else ''
 
 def extract_critic_score(line):
-    return line.split(': ')[1].strip()
+    return line.split(': ')[1].strip() if ': ' in line else ''
 
 def extract_audience_score(line):
-    return line.split(': ')[1].strip()
+    return line.split(': ')[1].strip() if ': ' in line else ''
 
 def extract_synopsis(line):
-    return line.strip()
+    return line.split(': ')[1].strip() if ': ' in line else ''
 
 def extract_reviews(line):
     return line.strip()
 
 def extract_imdb_link(line):
-    return line.split('(')[1].split(')')[0].strip()
+    return line.split(' ')[-1].strip() if ' ' in line else ''
