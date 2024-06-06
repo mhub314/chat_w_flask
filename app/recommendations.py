@@ -14,8 +14,8 @@ openai.api_key = os.getenv("CHATGPT_KEY")
 tmdb_api_key = os.getenv("TMDB_API_KEY")
 tmdb_access_token = os.getenv("TMDB_ACCESS_TOKEN")
 
-if openai.api_key is None:
-    error_message = "Error: CHATGPT_KEY not found in environment variables."
+if openai.api_key is None or tmdb_api_key is None or tmdb_access_token is None:
+    error_message = "Error: Missing required environment variables."
     print(error_message)
     logging.error(error_message)
     raise ValueError(error_message)
@@ -106,21 +106,20 @@ def extract_details(recommendation):
     try:
         if len(lines) > 0:
             details['title'] = extract_title(lines[0])
-        if len(lines) > 1:
             details['year'] = extract_year(lines[0])
-        if len(lines) > 2:
+        if len(lines) > 1:
             details['runtime'] = extract_runtime(lines[1])
-        if len(lines) > 3:
+        if len(lines) > 2:
             details['streaming_service'] = extract_streaming_service(lines[2])
-        if len(lines) > 4:
+        if len(lines) > 3:
             details['rotten_tomatoes_critic_score'] = extract_critic_score(lines[3])
-        if len(lines) > 5:
+        if len(lines) > 4:
             details['rotten_tomatoes_audience_score'] = extract_audience_score(lines[4])
-        if len(lines) > 6:
+        if len(lines) > 5:
             details['synopsis'] = extract_synopsis(lines[5])
-        if len(lines) > 7:
+        if len(lines) > 6:
             details['reviews'] = extract_reviews(lines[6])
-        if len(lines) > 8:
+        if len(lines) > 7:
             details['imdb_link'] = extract_imdb_link(lines[7])
     except IndexError as e:
         logging.error(f"IndexError: {e} - Line: {lines}")
@@ -131,7 +130,7 @@ def extract_details(recommendation):
     return details
 
 def extract_title(line):
-    return line.split('"')[1].strip() if '"' in line else ''
+    return line.split('. ')[1].split(' (')[0].strip() if '. ' in line and ' (' in line else ''
 
 def extract_year(line):
     return line.split('(')[1].split(')')[0].strip() if '(' in line and ')' in line else ''
@@ -152,7 +151,7 @@ def extract_synopsis(line):
     return line.split(': ')[1].strip() if ': ' in line else ''
 
 def extract_reviews(line):
-    return line.strip()
+    return line.split(': ')[1].strip() if ': ' in line else ''
 
 def extract_imdb_link(line):
     return line.split(' ')[-1].strip() if ' ' in line else ''
