@@ -102,27 +102,30 @@ def extract_details(recommendation):
     details = {}
     lines = recommendation.split('\n')
     logging.debug(f"Extracting details from: {lines}")
+    
     try:
         details['title'] = extract_title(lines[0])
-        details['year'] = extract_year(lines[1])
-        details['runtime'] = extract_runtime(lines[2])
-        details['streaming_service'] = extract_streaming_service(lines[3])
-        details['rotten_tomatoes_critic_score'] = extract_critic_score(lines[4])
-        details['rotten_tomatoes_audience_score'] = extract_audience_score(lines[5])
-        details['synopsis'] = extract_synopsis(lines[6])
-        details['reviews'] = extract_reviews(lines[7])
-        details['imdb_link'] = extract_imdb_link(lines[8])
+        details['year'] = extract_year(lines[0])
+        details['runtime'] = extract_runtime(lines[1])
+        details['streaming_service'] = extract_streaming_service(lines[2])
+        details['rotten_tomatoes_critic_score'] = extract_critic_score(lines[3])
+        details['rotten_tomatoes_audience_score'] = extract_audience_score(lines[4])
+        details['synopsis'] = extract_synopsis(lines[5])
+        details['reviews'] = extract_reviews(lines[6])
+        details['imdb_link'] = extract_imdb_link(lines[7])
     except IndexError as e:
-        logging.error(f"IndexError: {e}")
+        logging.error(f"IndexError: {e} - Line: {lines}")
+        logging.error(f"Details so far: {details}")
     except Exception as e:
         logging.error(f"Error extracting details: {e}")
+        logging.error(f"Details so far: {details}")
     return details
 
 def extract_title(line):
-    return line.split(': ')[1].strip()
+    return line.split('"')[1].strip()
 
 def extract_year(line):
-    return line.split(': ')[1].strip()
+    return line.split('(')[1].split(')')[0].strip()
 
 def extract_runtime(line):
     return line.split(': ')[1].strip()
@@ -137,10 +140,10 @@ def extract_audience_score(line):
     return line.split(': ')[1].strip()
 
 def extract_synopsis(line):
-    return line.split(': ')[1].strip()
+    return line.strip()
 
 def extract_reviews(line):
-    return line.split(': ')[1].strip()
+    return line.strip()
 
 def extract_imdb_link(line):
-    return line.split(': ')[1].strip()
+    return line.split('(')[1].split(')')[0].strip()
