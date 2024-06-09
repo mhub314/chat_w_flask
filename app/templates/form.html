@@ -20,7 +20,7 @@
     </style>
 </head>
 <body>
-    <form id="recommendationForm" action="/recommendations" method="post">
+    <form id="recommendationForm" action="/api/recommendations" method="post">
         <label for="movie">Find me something similar to:</label>
         <input type="text" id="movie" name="movie">
         
@@ -66,9 +66,12 @@
         <button type="button" id="clearSelections">Clear</button>
 
         <button type="submit">Submit</button>
+        <button type="button" id="moreRecommendations">Get More Recommendations</button>
+
+        <input type="hidden" id="moreRecommendationsFlag" name="moreRecommendationsFlag" value="false">
     </form>
 
-    <!-- <div id="recommendations"></div> -->
+    <div id="recommendations"></div>
     
     <script>
         const maxSelections = 6;
@@ -92,49 +95,54 @@
                     }
                 } else {
                     button.classList.toggle('selected');
+                }
+            });
+        });
+
+        document.getElementById('recommendationForm').addEventListener('submit', function(event) {
+            const selectedGenres = Array.from(document.querySelectorAll('#genres .selected')).map(button => button.getAttribute('data-value'));
+            const selectedMoods = Array.from(document.querySelectorAll('#moods .selected')).map(button => button.getAttribute('data-value'));
+            const selectedStreamingServices = Array.from(document.querySelectorAll('#streaming-services .selected')).map(button => button.getAttribute('data-value'));
+
+            if (selectedGenres.length + selectedMoods.length > maxSelections) {
+                event.preventDefault();
+                alert('You can select a total of up to 6 genres and moods.');
+                return;
             }
+
+            const hiddenGenresInput = document.createElement('input');
+            hiddenGenresInput.type = 'hidden';
+            hiddenGenresInput.name = 'genres';
+            hiddenGenresInput.value = selectedGenres.join(',');
+
+            const hiddenMoodsInput = document.createElement('input');
+            hiddenMoodsInput.type = 'hidden';
+            hiddenMoodsInput.name = 'moods';
+            hiddenMoodsInput.value = selectedMoods.join(',');
+
+            const hiddenStreamingServicesInput = document.createElement('input');
+            hiddenStreamingServicesInput.type = 'hidden';
+            hiddenStreamingServicesInput.name = 'streaming_services';
+            hiddenStreamingServicesInput.value = selectedStreamingServices.join(',');
+
+            this.appendChild(hiddenGenresInput);
+            this.appendChild(hiddenMoodsInput);
+            this.appendChild(hiddenStreamingServicesInput);
         });
-    });
 
-    document.getElementById('recommendationForm').addEventListener('submit', function(event) {
-        const selectedGenres = Array.from(document.querySelectorAll('#genres .selected')).map(button => button.getAttribute('data-value'));
-        const selectedMoods = Array.from(document.querySelectorAll('#moods .selected')).map(button => button.getAttribute('data-value'));
-        const selectedStreamingServices = Array.from(document.querySelectorAll('#streaming-services .selected')).map(button => button.getAttribute('data-value'));
-            
-        if (selectedGenres.length + selectedMoods.length > maxSelections) {
-            event.preventDefault();
-            alert('You can select a total of up to 6 genres and moods.');
-            return;
-        }
-
-        const hiddenGenresInput = document.createElement('input');
-        hiddenGenresInput.type = 'hidden';
-        hiddenGenresInput.name = 'genres';
-        hiddenGenresInput.value = selectedGenres.join(',');
-
-        const hiddenMoodsInput = document.createElement('input');
-        hiddenMoodsInput.type = 'hidden';
-        hiddenMoodsInput.name = 'moods';
-        hiddenMoodsInput.value = selectedMoods.join(',');
-
-        const hiddenStreamingServicesInput = document.createElement('input');
-        hiddenStreamingServicesInput.type = 'hidden';
-        hiddenStreamingServicesInput.name = 'streaming_services';
-        hiddenStreamingServicesInput.value = selectedStreamingServices.join(',');
-
-        this.appendChild(hiddenGenresInput);
-        this.appendChild(hiddenMoodsInput);
-        this.appendChild(hiddenStreamingServicesInput);
-
-    });
-
-    document.getElementById('clearSelections').addEventListener('click', function() {
-        document.querySelectorAll('.selection-button.selected').forEach(button => {
-            button.classList.remove('selected');
+        document.getElementById('clearSelections').addEventListener('click', function() {
+            document.querySelectorAll('.selection-button.selected').forEach(button => {
+                button.classList.remove('selected');
+            });
+            selectedCount = 0;
         });
-        selectedCount = 0;
-    });
+
+        document.getElementById('moreRecommendations').addEventListener('click', function() {
+            document.getElementById('moreRecommendationsFlag').value = 'true';
+            document.getElementById('recommendationForm').submit();
+        });
     </script>
 </body>
 </html>
+
 

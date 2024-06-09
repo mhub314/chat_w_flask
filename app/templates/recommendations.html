@@ -36,11 +36,15 @@
                     <p><a href="{{ rec.imdb_link }}" target="_blank">IMDB Page</a></p>
                 </div>
             {% endfor %}
+            {% if more_recommendations %}
+                <form action="/api/recommendations" method="post">
+                    <input type="hidden" name="moreRecommendationsFlag" value="true">
+                    <input type="submit" value="Get More Recommendations">
+                </form>
+            {% endif %}
         {% endif %}
     </div>
     <a href="/">Back to form</a>
 </body>
 </html>
-
-
 

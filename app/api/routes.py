@@ -1,5 +1,5 @@
 from . import api
-from flask import request, jsonify, render_template
+from flask import request, render_template, jsonify
 from app.recommendations import get_recommendations
 import logging
 
@@ -22,6 +22,7 @@ def recommendations():
         genres = data.get('genres')
         moods = data.get('moods')
         streaming_services = data.get('streaming_services')
+        more_recommendations_flag = data.get('moreRecommendationsFlag')
 
         if genres:
             genres = [genre.strip() for genre in genres.split(",")]
@@ -35,7 +36,7 @@ def recommendations():
         recommendations = get_recommendations(movie, genres, moods, streaming_services)
         logging.debug(f"Recommendations: {recommendations}")
         print(f"Recommendations: {recommendations}")
-        return render_template('recommendations.html', recommendations=recommendations)
+        return render_template('recommendations.html', recommendations=recommendations, more_recommendations=more_recommendations_flag)
 
     except Exception as e:
         error_message = f"Error: {str(e)}"
@@ -43,10 +44,10 @@ def recommendations():
         print(error_message)
         return render_template('recommendations.html', error=error_message)
 
-@api.route('/', methods=['GET'])
-def home():
-    return render_template('form.html')
 
+# @api.route('/', methods=['GET'])
+# def home():
+#     return render_template('form.html')
 
 
 

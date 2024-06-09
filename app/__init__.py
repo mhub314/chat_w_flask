@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -20,21 +20,21 @@ def create_app():
     cors.init_app(app, resources={r"/*": {"origins": [
         "https://marvelous-kringle-b96ab5.netlify.app",
         "http://localhost:3000",
-        ]}})
+    ]}})
     moment.init_app(app)
 
     with app.app_context():
         from . import models
         from .api import api as api_blueprint
-        app.register_blueprint(api_blueprint)
+        app.register_blueprint(api_blueprint, url_prefix='/api')
+
+        # Define the root route to serve form.html
+        @app.route('/')
+        def home():
+            return render_template('form.html')
 
         for rule in app.url_map.iter_rules():
             logging.debug(f'Route: {rule} -> {rule.endpoint}')
             print(f'Route: {rule} -> {rule.endpoint}')
 
     return app
-
-
-
-
-
