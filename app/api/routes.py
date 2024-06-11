@@ -3,6 +3,10 @@ from flask import request, render_template, jsonify
 from app.recommendations import get_recommendations
 import logging
 
+# Define the /api/recommendations route
+# This route receives a POST request with form data, processes the data, and returns recommendations
+# The recommendations are displayed on the recommendations.html page
+
 @api.route('/recommendations', methods=['POST'])
 def recommendations():
     logging.debug("Accessed /api/recommendations route")
@@ -43,11 +47,4 @@ def recommendations():
         logging.error(error_message)
         print(error_message)
         return render_template('recommendations.html', error=error_message)
-
-
-# @api.route('/', methods=['GET'])
-# def home():
-#     return render_template('form.html')
-
-
 

@@ -1,3 +1,6 @@
+
+<!-- This is the output page -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +33,10 @@
                     {% if rec.poster_url %}
                         <img src="{{ rec.poster_url }}" alt="Poster" class="poster">
                     {% endif %}
+                    {% if rec.similarity and rec.explanation %}
+                        <p>Similarity: {{ rec.similarity }}%</p>
+                        <p>{{ rec.explanation }}</p>
+                    {% endif %}
                     <p>Critics Score: {{ rec.rotten_tomatoes_critic_score }} | Audience Score: {{ rec.rotten_tomatoes_audience_score }}</p>
                     <p>Synopsis: {{ rec.synopsis }}</p>
                     <p>Reviews: {{ rec.reviews }}</p>
@@ -39,6 +46,20 @@
             {% if more_recommendations %}
                 <form action="/api/recommendations" method="post">
                     <input type="hidden" name="moreRecommendationsFlag" value="true">
+                    {% for rec in recommendations %}
+                        <input type="hidden" name="title" value="{{ rec.title }}">
+                        <input type="hidden" name="year" value="{{ rec.year }}">
+                        <input type="hidden" name="runtime" value="{{ rec.runtime }}">
+                        <input type="hidden" name="streaming_service" value="{{ rec.streaming_service }}">
+                        <input type="hidden" name="similarity" value="{{ rec.similarity }}">
+                        <input type="hidden" name="explanation" value="{{ rec.explanation }}">
+                        <input type="hidden" name="rotten_tomatoes_critic_score" value="{{ rec.rotten_tomatoes_critic_score }}">
+                        <input type="hidden" name="rotten_tomatoes_audience_score" value="{{ rec.rotten_tomatoes_audience_score }}">
+                        <input type="hidden" name="synopsis" value="{{ rec.synopsis }}">
+                        <input type="hidden" name="reviews" value="{{ rec.reviews }}">
+                        <input type="hidden" name="imdb_link" value="{{ rec.imdb_link }}">
+                        <input type="hidden" name="poster_url" value="{{ rec.poster_url }}">
+                    {% endfor %}
                     <input type="submit" value="Get More Recommendations">
                 </form>
             {% endif %}
@@ -47,4 +68,3 @@
     <a href="/">Back to form</a>
 </body>
 </html>
-
