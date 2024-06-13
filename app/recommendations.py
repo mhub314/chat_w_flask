@@ -90,8 +90,8 @@ def convert_runtime(runtime):
 
 def get_recommendations(movie=None, genres=None, moods=None, streaming_services=None):
     prompt_options = ["Please recommend 3 movies", "Can you suggest 3 movies", "I would like 3 recommendations for movies"]
-
     prompt = random.choice(prompt_options)
+
     if movie:
         prompt += f" similar to {movie}"
     if genres:
@@ -103,9 +103,10 @@ def get_recommendations(movie=None, genres=None, moods=None, streaming_services=
     
     if movie:
         prompt += ". Include a percentage similarity and 1-2 sentences about why they are similar."
+
     prompt += " For each recommendation, please provide the title, the year it came out, the runtime, the streaming service, the Rotten Tomatoes critic score, the Rotten Tomatoes audience score, a 2-3 sentence synopsis with any well-known actors of the recommended movie or tv show, 2-3 sentences about the reviews, and a link to the IMDB page. Ensure each piece of information is on a new line and clearly labeled as follows:"
 
-    #If the user inputs a movie, there should be a similarity percentage and explanation
+        #If the user inputs a movie, there should be a similarity percentage and explanation
     if movie:
         prompt += """
 Similarity: <similarity percentage>
@@ -169,7 +170,7 @@ def extract_details(recommendation):
     lines = recommendation.split('\n')
     logging.debug(f"Extracting details from: {lines}")
 
-    fields = ['Title', 'Year', 'Runtime', 'Streaming Service', 'Similarity', 'Explanation', 
+    fields = ['Similarity', 'Explanation', 'Title', 'Year', 'Runtime', 'Streaming Service', 
               'Rotten Tomatoes Critic Score', 'Rotten Tomatoes Audience Score', 'Synopsis', 
               'Reviews', 'IMDB']
 
@@ -178,18 +179,12 @@ def extract_details(recommendation):
 
     return details
 
-# def extract_field(lines, field):
-#     for line in lines:
-#         if field in line:
-#             logging.debug(f"Extracting field '{field}' from line: {line}")
-#             return line.split(field)[1].strip()
-#     return ''
 
 def extract_field(lines, field):
     for line in lines:
         if line.startswith(field):
             logging.debug(f"Extracting field '{field}' from line: {line}")
-            return line.split(field)[1].strip()
+            return line.split(field, 1)[1].strip()
     return ''
 
 # Added this function to extract title and year from a line
