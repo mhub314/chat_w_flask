@@ -34,7 +34,7 @@
                         <img src="{{ rec.poster_url }}" alt="Poster" class="poster">
                     {% endif %}
                     {% if rec.similarity and rec.explanation %}
-                        <p>Similarity: {{ rec.similarity }}%</p>
+                        <p>Similarity: {{ rec.similarity }}</p>
                         <p>{{ rec.explanation }}</p>
                     {% endif %}
                     <p>Critics Score: {{ rec.rotten_tomatoes_critic_score }} | Audience Score: {{ rec.rotten_tomatoes_audience_score }}</p>
@@ -45,6 +45,11 @@
             {% endfor %}
             {% if more_recommendations %}
                 <form action="/api/recommendations" method="post">
+                    <!-- <input type="hidden" name="moreRecommendationsFlag" value="true"> -->
+                    <input type="hidden" name="movie" value="{{ movie }}">
+                    <input type="hidden" name="genres" value="{{ genres|join(',') }}">
+                    <input type="hidden" name="moods" value="{{ moods|join(',') }}">
+                    <input type="hidden" name="streaming_services" value="{{ streaming_services|join(',') }}">
                     <input type="hidden" name="moreRecommendationsFlag" value="true">
                     {% for rec in recommendations %}
                         <input type="hidden" name="title" value="{{ rec.title }}">

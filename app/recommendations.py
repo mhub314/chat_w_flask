@@ -3,6 +3,7 @@ import os
 import logging
 import requests
 from dotenv import load_dotenv
+import random
 
 
 # I added a LOT of debug logging because I started with a lot of problems
@@ -88,19 +89,34 @@ def convert_runtime(runtime):
 # I added if statements for optional parameters
 
 def get_recommendations(movie=None, genres=None, moods=None, streaming_services=None):
-    prompt = "Please recommend 3 movies"
+    prompt_options = ["Please recommend 3 movies", "Can you suggest 3 movies", "I would like 3 recommendations for movies"]
+
+    prompt = random.choice(prompt_options)
     if movie:
         prompt += f" similar to {movie}"
     if genres:
         prompt += f" in the genres: {', '.join(genres)}"
     if moods:
-        prompt += f" for someone who is feeling {', '.join(moods)}"
+        prompt += f" for someone who is looking for something {', '.join(moods)}"
     if streaming_services:
         prompt += f" currently available on {', '.join(streaming_services)}"
     
     if movie:
         prompt += ". Include a percentage similarity and 1-2 sentences about why they are similar."
     prompt += " For each recommendation, please provide the title, the year it came out, the runtime, the streaming service, the Rotten Tomatoes critic score, the Rotten Tomatoes audience score, a 2-3 sentence synopsis with any well-known actors of the recommended movie or tv show, 2-3 sentences about the reviews, and a link to the IMDB page. Ensure each piece of information is on a new line and clearly labeled as follows:"
+
+    #If the user inputs a movie, there should be a similarity percentage and explanation
+    if movie:
+        prompt += """
+Similarity: <similarity percentage>
+Explanation: <similarity explanation>
+"""
+
+    #Adding a random number to the prompt to make each output unique
+    #Was not getting enough variety in the responses
+    random_number = random.randint(1,1000)
+    unique_context = random.choice(['context', 'variant', 'version'])
+    prompt += f" [{unique_context}: {random_number}]"
 
 #The below is to format the response how Anna designed it in the frontend
 #I am hoping this will make the translation to frontend easier
@@ -110,8 +126,6 @@ Title: <movie title>
 Year: <year>
 Runtime: <runtime>
 Streaming Service: <streaming service>
-Similarity: <similarity percentage>
-Explanation: <similarity explanation>
 Rotten Tomatoes Critic Score: <critic score>
 Rotten Tomatoes Audience Score: <audience score>
 Synopsis: <synopsis>
@@ -164,9 +178,16 @@ def extract_details(recommendation):
 
     return details
 
+# def extract_field(lines, field):
+#     for line in lines:
+#         if field in line:
+#             logging.debug(f"Extracting field '{field}' from line: {line}")
+#             return line.split(field)[1].strip()
+#     return ''
+
 def extract_field(lines, field):
     for line in lines:
-        if field in line:
+        if line.startswith(field):
             logging.debug(f"Extracting field '{field}' from line: {line}")
             return line.split(field)[1].strip()
     return ''

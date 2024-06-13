@@ -1,5 +1,5 @@
 from . import api
-from flask import request, render_template, jsonify
+from flask import request, render_template
 from app.recommendations import get_recommendations
 import logging
 
@@ -37,10 +37,17 @@ def recommendations():
         if streaming_services:
             streaming_services = [service.strip() for service in streaming_services.split(",")]
 
-        recommendations = get_recommendations(movie, genres, moods, streaming_services)
+        if more_recommendations_flag:
+            recommendations = get_recommendations(movie, genres, moods, streaming_services)
+          
+
+        #Call get_recommendations with the user's input  
+        # recommendations = get_recommendations(movie, genres, moods, streaming_services)
         logging.debug(f"Recommendations: {recommendations}")
         print(f"Recommendations: {recommendations}")
-        return render_template('recommendations.html', recommendations=recommendations, more_recommendations=more_recommendations_flag)
+
+        #Render recommendations.html with the new set of recommendatins
+        return render_template('recommendations.html', recommendations=recommendations, movie=movie, genres=genres, streaming_services=streaming_services, more_recommendations=True)
 
     except Exception as e:
         error_message = f"Error: {str(e)}"
