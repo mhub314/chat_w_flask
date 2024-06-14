@@ -8,7 +8,7 @@ import logging
 
 db = SQLAlchemy()
 migrate = Migrate()
-cors = CORS()
+# cors = CORS()
 moment = Moment()
 
 def create_app():
@@ -17,10 +17,12 @@ def create_app():
 
     db.init_app(app)
     migrate.init_app(app, db)
-    cors.init_app(app, resources={r"/*": {"origins": [
+
+    CORS(app, resources={r"/*": {"origins": [
         "https://marvelous-kringle-b96ab5.netlify.app",
-        "http://localhost:3000",
+        "http://localhost:3000",    
     ]}})
+
     moment.init_app(app)
 
     with app.app_context():
@@ -31,6 +33,7 @@ def create_app():
         # Define the root route to serve form.html
         @app.route('/')
         def home():
+            logging.debug("Accessed home route")
             return render_template('form.html')
 
         for rule in app.url_map.iter_rules():
