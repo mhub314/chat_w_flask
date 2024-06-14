@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, jsonify, render_template
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -35,6 +35,11 @@ def create_app():
         def home():
             logging.debug("Accessed home route")
             return render_template('form.html')
+        
+        @app.route('/test')
+        def test():
+            logging.debug("Accessed test route")
+            return jsonify({"message": "Test route working"})
 
         for rule in app.url_map.iter_rules():
             logging.debug(f'Route: {rule} -> {rule.endpoint}')
