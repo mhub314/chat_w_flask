@@ -44,7 +44,7 @@
                 </div>
             {% endfor %}
             {% if more_recommendations %}
-                <form action="/api/recommendations" method="post">
+                <form action="/api/form/recommendations" method="post">
                     <!-- <input type="hidden" name="moreRecommendationsFlag" value="true"> -->
                     <input type="hidden" name="movie" value="{{ movie }}">
                     <input type="hidden" name="genres" value="{{ genres|join(',') }}">
