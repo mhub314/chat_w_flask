@@ -1,5 +1,5 @@
 from . import api
-from flask import request, render_template
+from flask import request, jsonify
 from app.recommendations import get_recommendations
 import logging
 
@@ -12,7 +12,7 @@ def recommendations():
     logging.debug("Accessed /api/recommendations route")
     print("Accessed /api/recommendations route")
     try:
-        data = request.form.to_dict()
+        data = request.get_json()
         logging.debug(f'Received data: {data}')
         print(f"Received data: {data}")
 
@@ -20,7 +20,7 @@ def recommendations():
             error_message = "No data received"
             logging.error(error_message)
             print(error_message)
-            return render_template('recommendations.html', error=error_message)
+            return jsonify({"error": error_message}), 400
         
         movie = data.get('movie')
         genres = data.get('genres')
@@ -39,6 +39,8 @@ def recommendations():
 
         if more_recommendations_flag:
             recommendations = get_recommendations(movie, genres, moods, streaming_services)
+        else:
+            recommendations = []
           
 
         #Call get_recommendations with the user's input  
@@ -47,11 +49,11 @@ def recommendations():
         print(f"Recommendations: {recommendations}")
 
         #Render recommendations.html with the new set of recommendatins
-        return render_template('recommendations.html', recommendations=recommendations, movie=movie, genres=genres, streaming_services=streaming_services, more_recommendations=True)
+        return jsonify(recommendations), 200
 
     except Exception as e:
         error_message = f"Error: {str(e)}"
         logging.error(error_message)
         print(error_message)
-        return render_template('recommendations.html', error=error_message)
+        return jsonify({"error": error_message}), 500
 

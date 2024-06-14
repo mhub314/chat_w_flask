@@ -30,7 +30,7 @@ def create_app():
         from .api import api as api_blueprint
         app.register_blueprint(api_blueprint, url_prefix='/api')
 
-        # Define the root route to serve form.html
+        # Define the root route for form.html
         @app.route('/')
         def home():
             logging.debug("Accessed home route")
