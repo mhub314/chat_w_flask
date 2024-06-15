@@ -19,7 +19,7 @@ def create_app():
     migrate.init_app(app, db)
 
     CORS(app, resources={r"/*": {"origins": [
-        "https://marvelous-kringle-b96ab5.netlify.app",
+        "https://watch-buddy.vercel.app/",
         "http://localhost:3000",    
     ]}})
 
