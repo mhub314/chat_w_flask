@@ -55,11 +55,12 @@ def form_recommendations():
         streaming_services = data.get('streaming_services', '')
         more_recommendations_flag = data.get('moreRecommendationsFlag', False)
 
+
         genres = [genre.strip() for genre in genres.split(",")] if genres else []
         moods = [mood.strip() for mood in moods.split(",")] if moods else []
         streaming_services = [service.strip() for service in streaming_services.split(",")] if streaming_services else []
 
-        recommendations = get_recommendations(movie, genres, moods, streaming_services) if more_recommendations_flag else []
+        recommendations = get_recommendations(movie, genres, moods, streaming_services)
 
         logging.debug(f"Recommendations: {recommendations}")
         return render_template('recommendations.html', recommendations=recommendations, movie=movie, genres=genres, streaming_services=streaming_services, more_recommendations=more_recommendations_flag)
