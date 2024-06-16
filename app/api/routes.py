@@ -23,13 +23,13 @@ def api_recommendations():
         genres = data.get('genres', '')
         moods = data.get('moods', '')
         streaming_services = data.get('streaming_services', '')
-        more_recommendations_flag = data.get('moreRecommendationsFlag', False)
+        more_recommendations_flag = data.get('moreRecommendationsFlag', 'false').lower() == 'true'
 
         genres = [genre.strip() for genre in genres.split(",")] if genres else []
         moods = [mood.strip() for mood in moods.split(",")] if moods else []
         streaming_services = [service.strip() for service in streaming_services.split(",")] if streaming_services else []
 
-        recommendations = get_recommendations(movie, genres, moods, streaming_services) if more_recommendations_flag else []
+        recommendations = get_recommendations(movie, genres, moods, streaming_services) if not more_recommendations_flag else []
 
         logging.debug(f"Recommendations: {recommendations}")
         return jsonify(recommendations), 200
@@ -53,14 +53,14 @@ def form_recommendations():
         genres = data.get('genres', '')
         moods = data.get('moods', '')
         streaming_services = data.get('streaming_services', '')
-        more_recommendations_flag = data.get('moreRecommendationsFlag', False)
+        more_recommendations_flag = data.get('moreRecommendationsFlag', 'false').lower() == 'true'
 
 
         genres = [genre.strip() for genre in genres.split(",")] if genres else []
         moods = [mood.strip() for mood in moods.split(",")] if moods else []
         streaming_services = [service.strip() for service in streaming_services.split(",")] if streaming_services else []
 
-        recommendations = get_recommendations(movie, genres, moods, streaming_services)
+        recommendations = get_recommendations(movie, genres, moods, streaming_services) if not more_recommendations_flag else [] 
 
         logging.debug(f"Recommendations: {recommendations}")
         return render_template('recommendations.html', recommendations=recommendations, movie=movie, genres=genres, streaming_services=streaming_services, more_recommendations=more_recommendations_flag)
