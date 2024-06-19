@@ -2,7 +2,6 @@ from . import api
 from flask import request, jsonify, render_template
 from app.recommendations import get_recommendations
 import logging
-from flask_cors import CORS
 
 # Route for handling JSON API requests
 @api.route('/recommendations', methods=['POST'])
@@ -34,7 +33,7 @@ def api_recommendations():
         recommendations = get_recommendations(movie, genres, moods, streaming_services) if not more_recommendations_flag else []
 
         logging.debug(f"Recommendations: {recommendations}")
-        return jsonify(recommendations), 200
+        return jsonify({"recommendations": recommendations}), 200
 
     except Exception as e:
         logging.error(f"Error: {str(e)}")
@@ -69,5 +68,9 @@ def form_recommendations():
     except Exception as e:
         logging.error(f"Error: {str(e)}")
         return render_template('recommendations.html', error=str(e))
+
+
+
+
 
 
