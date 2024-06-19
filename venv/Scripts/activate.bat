@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\mhube\OneDrive\Documents\openai_github\venv
+set VIRTUAL_ENV=C:\Users\mhube\Documents\Co.Lab_Final\openai_github\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

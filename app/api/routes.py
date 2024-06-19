@@ -30,7 +30,7 @@ def api_recommendations():
         moods = [mood.strip() for mood in moods]
         streaming_services = [service.strip() for service in streaming_services]
 
-        recommendations = get_recommendations(movie, genres, moods, streaming_services) if not more_recommendations_flag else []
+        recommendations = get_recommendations(movie, genres, moods, streaming_services)
 
         logging.debug(f"Recommendations: {recommendations}")
         return jsonify({"recommendations": recommendations}), 200
@@ -60,17 +60,11 @@ def form_recommendations():
         moods = [mood.strip() for mood in moods.split(",")] if moods else []
         streaming_services = [service.strip() for service in streaming_services.split(",")] if streaming_services else []
 
-        recommendations = get_recommendations(movie, genres, moods, streaming_services) if not more_recommendations_flag else [] 
+        recommendations = get_recommendations(movie, genres, moods, streaming_services) # always get new recommendations 
 
         logging.debug(f"Recommendations: {recommendations}")
-        return render_template('recommendations.html', recommendations=recommendations, movie=movie, genres=genres, streaming_services=streaming_services, more_recommendations=more_recommendations_flag)
+        return render_template('recommendations.html', recommendations=recommendations, movie=movie, genres=genres, moods=moods, streaming_services=streaming_services, more_recommendations=True)
 
     except Exception as e:
         logging.error(f"Error: {str(e)}")
         return render_template('recommendations.html', error=str(e))
-
-
-
-
-
-
