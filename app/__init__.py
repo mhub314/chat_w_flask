@@ -21,7 +21,7 @@ def create_app():
     CORS(app, resources={r"/*": {"origins": [
         "https://watch-buddy.vercel.app/",
         "http://localhost:3000",
-        "https://marvelous-kringle-b96ab5.netlify.app/"   
+        # "https://marvelous-kringle-b96ab5.netlify.app/"   
     ]}})
 
     moment.init_app(app)
